@@ -61,10 +61,11 @@ Run tests:
 
 ## Documentation
 
+- Fork and clone a [repository](https://github.com/play-log/documentation)
 - Install [mdBook](https://github.com/rust-lang-nursery/mdBook).
-- Create feature branch (`git checkout -b docs/%topic%`)
+- Create feature branch (`git checkout -b %topic%`)
 - Make your changes.
-- Preview with: `bin/docs serve --open`.
+- Preview with: `mdbook serve --open`.
 - Publish changes and send a pull request.
 
 ## Contributing

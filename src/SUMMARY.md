@@ -8,7 +8,9 @@
 - [Configuration](./configuration.md)
 - [Development](./development.md)
 - [Release](./release.md)
-- [Submissions API](./submissions.md)
+- [API](./api/index.md)
+    - [Playlog](./api/playlog.md)
+    - [Submissions](./api/submissions.md)
 
 -------------------------------------
 

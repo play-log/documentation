@@ -4,7 +4,7 @@
 It allows you to collect and view the statistics of scrobbles.
 Unlike other services (last.fm, libre.fm) playlog is intended for the sole use.
 This means you are not albe to create more than one account.
-At this moment it supports legacy [Submissions API](submissions.html)
+At this moment it supports legacy [Submissions API](api/submissions.html)
 only. So some music players won't work.
 There are plans to create a custom API with proxies
 for Submissions and [Scrobbling API](https://www.last.fm/api/scrobbling) support.
@@ -17,7 +17,7 @@ If you are interested, go to the next section and try!
 
 ## License
 
-Playlog is licensed under [The MIT License (MIT)](https://github.com/rossnomann/playlog/blob/master/LICENSE).
+Playlog is licensed under [The MIT License (MIT)](https://github.com/play-log/playlog/blob/master/LICENSE).
 
 [^scrobbling] Scrobbling is a term invented by Last.fm to describe the logging of songs that
 you listen to.

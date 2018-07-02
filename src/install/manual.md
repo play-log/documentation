@@ -8,7 +8,7 @@ Ensure that you have installed:
 Clone repository:
 
 ```sh
-git clone https://github.com/rossnomann/playlog.git
+git clone https://github.com/play-log/playlog.git
 ```
 
 Create and activate python virtual environment:
