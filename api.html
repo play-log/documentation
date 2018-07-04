@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>API - Playlog</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="./introduction.html"><strong>1.</strong> Introduction</a></li><li><a href="./install/index.html"><strong>2.</strong> Installation</a></li><li><ul class="section"><li><a href="./install/docker.html"><strong>2.1.</strong> Docker</a></li><li><a href="./install/manual.html"><strong>2.2.</strong> Manual</a></li></ul></li><li><a href="./upgrade.html"><strong>3.</strong> Upgrade</a></li><li><a href="./configuration.html"><strong>4.</strong> Configuration</a></li><li><a href="./development.html"><strong>5.</strong> Development</a></li><li><a href="./release.html"><strong>6.</strong> Release</a></li><li><a href="./api.html" class="active"><strong>7.</strong> API</a></li><li class="spacer"></li><li class="affix"><a href="./changelog.html">CHANGELOG</a></li><li class="affix"><a href="./todo.html">TODO</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Playlog</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="./api.html#api" id="api"><h1>API</h1></a>
+<p>Playlog has a Scrobbling API (see below).
+But you aslo can use Last.fm
+<a href="https://www.last.fm/api/submissions">Submissions</a> or
+<a href="https://www.last.fm/api/scrobbling">Scrobbling</a> API via
+<a href="https://github.com/play-log/lastfm-proxy">proxy</a>.</p>
+<a class="header" href="./api.html#playlog-scrobbling-api" id="playlog-scrobbling-api"><h2>Playlog Scrobbling API</h2></a>
+<a class="header" href="./api.html#creating-a-signature" id="creating-a-signature"><h3>Creating a signature</h3></a>
+<pre><code>&gt;&gt;&gt; import hashlib
+&gt;&gt;&gt; import hmac
+&gt;&gt;&gt; secret = b'76c2d25916334abc81de67fd740f9fb7'
+&gt;&gt;&gt; signature = hmac.new(
+...     secret,
+...     b'example.com+POST+/api/log+[{&quot;artist&quot;: &quot;artist&quot;, &quot;album&quot;: &quot;album&quot;, &quot;title&quot;: &quot;track title&quot;, &quot;timestamp&quot;: 1530716383}]',
+...     hashlib.sha256
+... )
+&gt;&gt;&gt; print(signature.hexdigest())
+7c63809421f8f8373e1fb953835ddfaf940161c7f2bf87f2b47c96cbcdc32f9f
+</code></pre>
+<p><code>secret</code> - a secret key stored in server config.</p>
+<a class="header" href="./api.html#now-playing" id="now-playing"><h3>Now-playing</h3></a>
+<a class="header" href="./api.html#request" id="request"><h4>Request</h4></a>
+<pre><code>POST /api/nowplay HTTP/1.1
+X-Signature: 1cf9fe230d88a1bb7b96bf0f7048a43d4436e86ce4dd7938d1b7b822c2007479
+Content-Type: application/json
+
+{&quot;artist&quot;: &quot;artist&quot;, &quot;album&quot;: &quot;album&quot;, &quot;title&quot;: &quot;track title&quot;, &quot;length&quot;: 300}
+</code></pre>
+<ul>
+<li><code>artist</code> - The artist name.</li>
+<li><code>album</code> - The album name.</li>
+<li><code>title</code> - The track title.</li>
+<li><code>length</code> - The track length in seconds.</li>
+</ul>
+<a class="header" href="./api.html#success-response" id="success-response"><h4>Success response</h4></a>
+<pre><code>{
+    &quot;success&quot;: true,
+    &quot;data&quot;: {
+        &quot;artist&quot;: &quot;artist&quot;,
+        &quot;album&quot;: &quot;album&quot;,
+        &quot;title&quot;: &quot;track title&quot;,
+        &quot;length&quot;: 300
+    }
+}
+</code></pre>
+<a class="header" href="./api.html#error-response" id="error-response"><h4>Error response</h4></a>
+<pre><code>{
+    &quot;success&quot;: false,
+    &quot;reason&quot;: &quot;An error has occurred&quot;
+}
+</code></pre>
+<a class="header" href="./api.html#logging" id="logging"><h3>Logging</h3></a>
+<a class="header" href="./api.html#request-1" id="request-1"><h4>Request</h4></a>
+<pre><code>POST /api/log HTTP/1.1
+X-Signature: 7c63809421f8f8373e1fb953835ddfaf940161c7f2bf87f2b47c96cbcdc32f9f
+Content-Type: application/json
+
+[{&quot;artist&quot;: &quot;artist&quot;, &quot;album&quot;: &quot;album&quot;, &quot;title&quot;: &quot;track title&quot;, &quot;timestamp&quot;: 1530716383}]
+</code></pre>
+<ul>
+<li><code>artist</code> - The artist name.</li>
+<li><code>album</code> - The album name.</li>
+<li><code>title</code> - The track title.</li>
+<li><code>timestamp</code> - The time the track started playing (in UNIX timestamp format, UTC).</li>
+</ul>
+<p>You can send up to 50 tracks per request.</p>
+<a class="header" href="./api.html#success-response-1" id="success-response-1"><h4>Success response</h4></a>
+<pre><code>{
+    &quot;success&quot;: true,
+    &quot;data&quot;: [
+        {
+            &quot;artist&quot;: &quot;artist&quot;,
+            &quot;album&quot;: &quot;album&quot;,
+            &quot;title&quot;: &quot;track title&quot;,
+            &quot;timestamp&quot;: 1530716383
+        }
+    ]
+}
+</code></pre>
+<a class="header" href="./api.html#error-response-1" id="error-response-1"><h4>Error response</h4></a>
+<pre><code>{
+    &quot;success&quot;: false,
+    &quot;reason&quot;: &quot;An error has occurred&quot;
+}
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./release.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="./changelog.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="./release.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./changelog.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
